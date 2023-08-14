@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时语音转文字</title>
+</head>
+<body>
+    <h1>实时语音转文字</h1>
+    <button id="startButton">开始</button>
+    <button id="stopButton">停止</button>
+    <div id="realtimeText"></div>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const realtimeTextDiv = document.getElementById('realtimeText');
+
+        // const ws = new WebSocket(`ws://127.0.0.1:5000/ws`);
+        startButton.addEventListener('click', async () => {
+            await fetch('/start');
+        });
+
+        stopButton.addEventListener('click', async () => {
+            await fetch('/stop');
+        });
+
+        // 使用 WebSocket 在页面上实时更新文本
+        const ws = new WebSocket(`ws://${window.location.host}/`);
+        // const ws = new WebSocket(`ws://127.0.0.1:5000/ws`);
+        ws.addEventListener('message', event => {
+            const sentence = event.data;
+            realtimeTextDiv.textContent = sentence;
+        });
+    </script>
+</body>
+</html>
